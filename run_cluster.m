@@ -11,22 +11,24 @@ res = [];
 
 %% Load ORL dataset
 f=1;
-load('dataset\handwritten.mat'); c=10;truth=Y;
-load('dataset\per50.mat');
+c=40;
 
-ind_folds = per50;
-ind_folds=ind_folds(:,1:2);
-numClust = length(unique(truth));
+
+
+load('dataset\ORL_4views.mat'); c=40;truth=truth';
+load('dataset\ORL_e2_fold.mat');
+ind_folds = folds{f};
+
 
 numClust = length(unique(truth));
-num_view =2
+num_view =size(X,2);
 [numFold,numInst]=size(ind_folds);
-fid=fopen('HD_write_Results_10_15_new1.txt','a');
+fid=fopen('ORL_PER_10.txt','a');
 
 result=[];
-Y = cell(1,2);
+Y = cell(1,num_view);
 for iv = 1:num_view
-    X1 = X{iv};
+    X1 = X{iv}';
     X1 = NormalizeFea(X1,1);
     ind_0 = find(ind_folds(:,iv) == 0);
     X1(ind_0,:) = [];
@@ -56,16 +58,16 @@ betalist= [0.9];
 %lambda1list=[1.38,1.39,1.9,2.4,2.5];
 %lambda1list = [1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0];
 %lambda1list = [1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0];
-lambda1list = [1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0];
+lambda1list = [1.0,1.3,1.4,1.5,1.6,2.1,2.0,2.10,2.11,2.12,2.13,2.14,2.15,2.15,2.17,2.18,35,45,21,26];
 %lambda2list = [1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0];
-lambda2list = [1.7];
+lambda2list = [1.0,1.1,1.2,1.3,1.6,1.7,1.65,1.66,100,50,24,36,78,21];
 
 
 maxIterTimes = 110;
-num_of_samples = 2000;
+num_of_samples = length(truth);
 %% Training
 allmaxValue = [];
-c=10;
+c=40;
 for rIndex = 1:length(rlist)
     r = rlist(rIndex);
     for pIndex = 1:length(plist)
@@ -77,7 +79,7 @@ for rIndex = 1:length(rlist)
                     lambda1 = lambda1list(lambda1Index);
                     lambda2 = lambda2list(lambda2Index);
                     mode=2;
-                    [res] = My_comple(S_temp,G,truth,c,omega,beta,p,mode,r,0,lambda1,maxIterTimes,num_of_samples,lambda2);
+                    [res] = My_comple(S_temp,G,truth,c,omega,beta,p,mode,r,0,lambda1,maxIterTimes,num_of_samples,lambda2,num_view);
                     tempR = r*ones(maxIterTimes,1); %这里的和里面的循环次数有关
                     tempP = p*ones(maxIterTimes,1);
                     tempBeta = beta*ones(maxIterTimes,1);

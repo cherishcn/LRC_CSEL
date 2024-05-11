@@ -1,7 +1,7 @@
-function res=My_comple(S,G,truth,c,omega,b,p,mode,r,lambda,lambda1,maxIterTimes,num_of_samples,lambda2)
+function res=My_comple(S,G,truth,c,omega,b,p,mode,r,lambda,lambda1,maxIterTimes,num_of_samples,lambda2,num_view)
 S_inner = S;
-Q2 = cell(1,2);
-P = cell(1,2);
+Q2 = cell(1,num_view);
+P = cell(1,num_view);
 EE =  zeros(num_of_samples,num_of_samples);
 T = zeros(num_of_samples,num_of_samples);
 I1 = zeros(num_of_samples,num_of_samples);
@@ -10,7 +10,7 @@ newQ1 = zeros(num_of_samples,c);
 
 
 %% Initialization
-Wv = [1/2 1/2]
+Wv = [1/num_view 1/num_view 1/num_view 1/num_view];
 [~,n2,~]=size(S_inner);
 
 for i=1:n2
@@ -20,8 +20,8 @@ for i=1:n2
     E{i}=P{i};
 end
 
-FF =  cell(1,2);
-for i = 1:2
+FF =  cell(1,num_view);
+for i = 1:num_view
      FF{i}=zeros(num_of_samples,c) 
 end;
 
@@ -34,21 +34,23 @@ tol = 1e-8; max_iter = maxIterTimes; rho = 1.1;
 Q1=zeros(dim); Q3=zeros(dim); W=zeros(dim); Y=zeros(dim);
 Z=zeros(dim); M=zeros(dim); F=zeros(n2,c); U=zeros(n2,c);
 iter=0;
-n_v = 2;
+n_v = num_view;
 temp_W = cell(1,n_v);
 temp_W_LD =  cell(1,n_v);
 alpha=1/n3*ones(1,n3);
 
 Z=S_sss;
-beta = [10,50]';
+if num_view==4
+    beta = [10,20,50,100]';
+end;
 H = zeros(num_of_samples,c);
 for i=1:n3
     [nu,~]=size(S_inner{i});
     omega(:,:,i)=G{i}'*ones(nu,nu)*G{i};%ones(numFold,numFold);
 end
 
-for i = 1:2
-    alpha(i) =0.5
+for i = 1:num_view
+    alpha(i) = 1/num_view;
 end;
 %初始值Ls,以后每步计算都会进行迭代
 Ls = zeros(num_of_samples,num_of_samples);
@@ -87,7 +89,7 @@ for i=1:max_iter
     
     %% Update F
 
-    n_v = size(W,3)
+    n_v = size(W,3);
 
     for j=1:n3
         temp_W{j} = W(:,:,j);
@@ -105,7 +107,7 @@ for i=1:max_iter
     
     %Update HH
     tempSum1 = zeros(num_of_samples,num_of_samples);
-    for i = 1:2
+    for i = 1:num_view
         tempSum1 =tempSum1+ Wv(i)*(eye(num_of_samples)-2*FF{i}*FF{i}');
     end;
     tempSum1 = tempSum1 + lambda2*(eye(num_of_samples)-2*T');
