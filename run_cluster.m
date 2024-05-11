@@ -23,7 +23,7 @@ ind_folds = folds{f};
 numClust = length(unique(truth));
 num_view =size(X,2);
 [numFold,numInst]=size(ind_folds);
-fid=fopen('ORL_PER_10.txt','a');
+%fid=fopen('ORL_PER_10.txt','a');
 
 result=[];
 Y = cell(1,num_view);
