@@ -11,7 +11,7 @@ res = [];
 
 %% Load ORL dataset
 f=1;
-c=40;
+c = length(unique(truth));
 
 
 
