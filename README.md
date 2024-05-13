@@ -1,4 +1,4 @@
-## Incomplete Multi-View Clustering via Simultaneous Tensor Completion and Consensus Spectral Embedding Learnin
+## Incomplete Multi-View Clustering via Simultaneous Tensor Completion and Consensus Spectral Embedding Learning
 
 
 ### requirements
