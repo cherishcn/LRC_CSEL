@@ -1,4 +1,4 @@
-function res=My_comple(S,G,truth,c,omega,b,p,mode,r,lambda,lambda1,maxIterTimes,num_of_samples,lambda2,num_view)
+function res=My_comple(S,G,truth,c,omega,b,p,r,lambda,lambda1,maxIterTimes,num_of_samples,lambda2,num_view)
 S_inner = S;
 Q2 = cell(1,num_view);
 P = cell(1,num_view);
@@ -22,7 +22,7 @@ end
 
 FF =  cell(1,num_view);
 for i = 1:num_view
-     FF{i}=zeros(num_of_samples,c) 
+     FF{i}=zeros(num_of_samples,c);
 end;
 
 FF_old = FF;

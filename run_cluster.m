@@ -11,12 +11,14 @@ res = [];
 
 %% Load ORL dataset
 f=1;
-c = length(unique(truth));
 
 
 
-load('dataset\ORL_4views.mat'); c=40;truth=truth';
+load('dataset\ORL_4views.mat');
+
 load('dataset\ORL_e2_fold.mat');
+
+c = length(unique(truth));
 ind_folds = folds{f};
 
 
@@ -24,7 +26,7 @@ numClust = length(unique(truth));
 num_view =size(X,2);
 [numFold,numInst]=size(ind_folds);
 %fid=fopen('ORL_PER_10.txt','a');
-
+fid=fopen('ORL_2ND_CASE.txt','a');
 result=[];
 Y = cell(1,num_view);
 for iv = 1:num_view
@@ -78,8 +80,8 @@ for rIndex = 1:length(rlist)
                 for lambda2Index = 1:length(lambda2list)
                     lambda1 = lambda1list(lambda1Index);
                     lambda2 = lambda2list(lambda2Index);
-                    mode=2;
-                    [res] = My_comple(S_temp,G,truth,c,omega,beta,p,mode,r,0,lambda1,maxIterTimes,num_of_samples,lambda2,num_view);
+                  
+                    [res] = My_comple(S_temp,G,truth,c,omega,beta,p,r,0,lambda1,maxIterTimes,num_of_samples,lambda2,num_view);
                     tempR = r*ones(maxIterTimes,1); %这里的和里面的循环次数有关
                     tempP = p*ones(maxIterTimes,1);
                     tempBeta = beta*ones(maxIterTimes,1);
@@ -103,6 +105,6 @@ for rIndex = 1:length(rlist)
     end
 end
 
-save('file_new1.mat','allmaxValue')
+save('file_new_result.mat','allmaxValue')
 %最好的acc
 %  78.7000   86.3080   80.4000    1.2500    0.8000    0.3250    0.3250
